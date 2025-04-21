@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شمسين - حاسبة الطاقة الشمسية المتكاملة</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #2ecc71;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 15px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            flex-direction: column;
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%23FDB813"/><path d="M50 15 L50 5 M50 95 L50 85 M15 50 L5 50 M95 50 L85 50 M25 25 L18 18 M82 82 L75 75 M25 75 L18 82 M82 25 L75 18" stroke="%23FF5722" stroke-width="3"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+        }
+
+        h1, h2, h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border: 1px solid #eee;
+        }
+
+        select, input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 14px;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: right;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .result-card {
+            background: #e8f4fc;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .whatsapp-btn {
+            background-color: #25D366;
+        }
+
+        .safety-margin {
+            display: inline-block;
+            padding: 3px 8px;
+            background-color: var(--success-color);
+            color: white;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        @media (min-width: 768px) {
+            .grid-container {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+            
+            .device-controls {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+                align-items: center;
+            }
+            
+            select, input, button {
+                margin: 0;
+            }
+        }
+
+        @media (max-width: 767px) {
+            table {
+                font-size: 12px;
+            }
+            
+            th, td {
+                padding: 8px 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo"></div>
+            <h1>شمسين</h1>
+            <p>حاسبة الطاقة الشمسية المتكاملة</p>
+        </div>
+        
+        <div class="section">
+            <input type="text" id="report-title" placeholder="عنوان التقرير (اختياري)" style="text-align: center; font-size: 1.1em;">
+        </div>
+        
+        <div class="section">
+            <h2>إعدادات النظام الأساسية</h2>
+            <div class="grid-container">
+                <div>
+                    <label>نوع النظام:</label>
+                    <select id="system-type">
+                        <option value="offgrid">نظام معزول (أوف جريد)</option>
+                        <option value="ongrid">نظام متصل بالشبكة (أون جريد)</option>
+                        <option value="hybrid">نظام هجين</option>
+                    </select>
+                </div>
+                <div>
+                    <label>ساعات الذروة الشمسية:</label>
+                    <input type="number" id="sun-hours" value="5" min="1" max="10">
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>إضافة الأجهزة</h2>
+            <div class="device-controls">
+                <select id="device-category">
+                    <option value="">اختر فئة الجهاز</option>
+                    <option value="cooling">أجهزة التبريد</option>
+                    <option value="water">مضخات المياه</option>
+                    <option value="kitchen">أجهزة المطبخ</option>
+                    <option value="electronics">أجهزة إلكترونية</option>
+                    <option value="lighting">الإضاءة</option>
+                </select>
+                
+                <select id="device-type" disabled>
+                    <option value="">اختر نوع الجهاز</option>
+                </select>
+                
+                <div>
+                    <input type="number" id="device-hours" placeholder="ساعات التشغيل" min="0" step="0.5">
+                    <input type="number" id="device-count" placeholder="العدد" value="1" min="1">
+                </div>
+            </div>
+            <button id="add-device">إضافة جهاز</button>
+            
+            <div style="overflow-x: auto;">
+                <table id="devices-table">
+                    <thead>
+                        <tr>
+                            <th>الجهاز</th>
+                            <th>الواط</th>
+                            <th>العدد</th>
+                            <th>الساعات</th>
+                            <th>الاستهلاك (ك.و.س)</th>
+                            <th>إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="devices-list">
+                        <!-- سيتم ملؤه بالجافاسكريبت -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>مواصفات النظام</h2>
+            <div class="grid-container">
+                <div>
+                    <label>حجم اللوح الشمسي (واط):</label>
+                    <select id="panel-wattage">
+                        <option value="100">100 واط</option>
+                        <option value="150">150 واط</option>
+                        <option value="200">200 واط</option>
+                        <option value="250">250 واط</option>
+                        <option value="300">300 واط</option>
+                        <option value="350">350 واط</option>
+                        <option value="400" selected>400 واط</option>
+                        <option value="450">450 واط</option>
+                        <option value="500">500 واط</option>
+                        <option value="550">550 واط</option>
+                        <option value="600">600 واط</option>
+                    </select>
+                </div>
+                <div>
+                    <label>نوع البطارية:</label>
+                    <select id="battery-type">
+                        <option value="100">100 أمبير/ساعة</option>
+                        <option value="150">150 أمبير/ساعة</option>
+                        <option value="200" selected>200 أمبير/ساعة</option>
+                    </select>
+                </div>
+                <div>
+                    <label>فولتية النظام:</label>
+                    <select id="system-voltage">
+                        <option value="12">12 فولت</option>
+                        <option value="24" selected>24 فولت</option>
+                        <option value="48">48 فولت</option>
+                    </select>
+                </div>
+                <div>
+                    <label>نسبة هامش الأمان:</label>
+                    <select id="safety-margin">
+                        <option value="1.1">10% (نظام منزلي)</option>
+                        <option value="1.2" selected>20% (نظام تجاري)</option>
+                        <option value="1.3">30% (نظام صناعي)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <button id="calculate-btn">حساب النظام الشمسي</button>
+            
+            <div id="results" class="result-card" style="display:none;">
+                <h3 id="results-title">نتائج الحساب</h3>
+                <div id="results-content"></div>
+                
+                <div class="share-buttons">
+                    <button id="whatsapp-share" class="whatsapp-btn">
+                        <i class="fab fa-whatsapp"></i> مشاركة عبر واتساب
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // تعريف الأجهزة
+            const devicesData = {
+                cooling: [
+                    {name: "مكيف مياه 4000 وحدة", wattage: 1500},
+                    {name: "مكيف مياه 6000 وحدة", wattage: 2200},
+                    {name: "ثلاجة 10 قدم", wattage: 200},
+                    {name: "ثلاجة 12 قدم", wattage: 250},
+                    {name: "ثلاجة 16 قدم", wattage: 300}
+                ],
+                water: [
+                    {name: "موتور مياه ربع حصان", wattage: 200},
+                    {name: "موتور مياه نصف حصان", wattage: 400},
+                    {name: "موتور مياه 1 حصان", wattage: 750},
+                    {name: "موتور مياه 1.5 حصان", wattage: 1100},
+                    {name: "موتور مياه 2 حصان", wattage: 1500}
+                ],
+                kitchen: [
+                    {name: "فرن كهربائي", wattage: 1200},
+                    {name: "خلاط", wattage: 500},
+                    {name: "فرامة", wattage: 300},
+                    {name: "ميكروويف", wattage: 800}
+                ],
+                electronics: [
+                    {name: "تلفزيون LED", wattage: 100},
+                    {name: "رسيفر", wattage: 30},
+                    {name: "حاسوب محمول", wattage: 60},
+                    {name: "شاحن موبايل", wattage: 5},
+                    {name: "شاحن لابتوب", wattage: 60}
+                ],
+                lighting: [
+                    {name: "لمبة إنارة LED", wattage: 10},
+                    {name: "لمبة إنارة موفرة", wattage: 20},
+                    {name: "لمبة إنارة هالوجين", wattage: 50}
+                ]
+            };
+
+            // تعريف العناصر
+            const deviceCategory = document.getElementById('device-category');
+            const deviceType = document.getElementById('device-type');
+            const deviceHours = document.getElementById('device-hours');
+            const deviceCount = document.getElementById('device-count');
+            const addBtn = document.getElementById('add-device');
+            const devicesList = document.getElementById('devices-list');
+            const calculateBtn = document.getElementById('calculate-btn');
+            const resultsDiv = document.getElementById('results');
+            const resultsTitle = document.getElementById('results-title');
+            const resultsContent = document.getElementById('results-content');
+            const whatsappShare = document.getElementById('whatsapp-share');
+            const reportTitle = document.getElementById('report-title');
+            
+            // إعدادات النظام
+            const systemType = document.getElementById('system-type');
+            const sunHours = document.getElementById('sun-hours');
+            const panelWattage = document.getElementById('panel-wattage');
+            const batteryType = document.getElementById('battery-type');
+            const systemVoltage = document.getElementById('system-voltage');
+            const safetyMargin = document.getElementById('safety-margin');
+            
+            let devices = [];
+            
+            // تحديث قائمة الأجهزة عند اختيار الفئة
+            deviceCategory.addEventListener('change', function() {
+                const category = this.value;
+                deviceType.innerHTML = '<option value="">اختر نوع الجهاز</option>';
+                deviceType.disabled = !category;
+                
+                if (category) {
+                    devicesData[category].forEach(device => {
+                        const option = document.createElement('option');
+                        option.value = device.name;
+                        option.textContent = `${device.name} (${device.wattage} واط)`;
+                        option.dataset.wattage = device.wattage;
+                        deviceType.appendChild(option);
+                    });
+                }
+            });
+            
+            // إضافة جهاز جديد
+            addBtn.addEventListener('click', function() {
+                const type = deviceType.value;
+                const hours = parseFloat(deviceHours.value);
+                const count = parseInt(deviceCount.value) || 1;
+                
+                if (!type || isNaN(hours) || hours <= 0) {
+                    alert('الرجاء إدخال البيانات بشكل صحيح');
+                    return;
+                }
+                
+                const selectedOption = deviceType.options[deviceType.selectedIndex];
+                const wattage = parseFloat(selectedOption.dataset.wattage);
+                const dailyConsumption = (wattage * hours * count / 1000).toFixed(2);
+                
+                devices.push({
+                    name: type,
+                    wattage: wattage,
+                    hours: hours,
+                    count: count,
+                    dailyConsumption: dailyConsumption
+                });
+                
+                updateDevicesList();
+                calculateSystem();
+            });
+            
+            // تحديث قائمة الأجهزة
+            function updateDevicesList() {
+                devicesList.innerHTML = '';
+                devices.forEach((device, index) => {
+                    const row = document.createElement('tr');
+                    
+                    row.innerHTML = `
+                        <td>${device.name}</td>
+                        <td>${device.wattage}</td>
+                        <td>${device.count}</td>
+                        <td>${device.hours}</td>
+                        <td>${device.dailyConsumption}</td>
+                        <td>
+                            <button onclick="editDevice(${index})">تعديل</button>
+                            <button onclick="deleteDevice(${index})">حذف</button>
+                        </td>
+                    `;
+                    
+                    devicesList.appendChild(row);
+                });
+            }
+            
+            // حساب النظام الشمسي
+            function calculateSystem() {
+                if (devices.length === 0) {
+                    resultsDiv.style.display = 'none';
+                    return;
+                }
+                
+                const currentSystemType = systemType.value;
+                const currentSunHours = parseFloat(sunHours.value) || 5;
+                const currentPanelWattage = parseInt(panelWattage.value);
+                const currentBatteryType = parseInt(batteryType.value);
+                const currentSystemVoltage = parseInt(systemVoltage.value);
+                const currentSafetyMargin = parseFloat(safetyMargin.value);
+                
+                // حساب الاستهلاك الكلي
+                let totalConsumption = 0;
+                let maxLoad = 0;
+                
+                devices.forEach(device => {
+                    const deviceLoad = device.wattage * device.count;
+                    totalConsumption += deviceLoad * device.hours;
+                    if (deviceLoad > maxLoad) {
+                        maxLoad = deviceLoad;
+                    }
+                });
+                
+                const dailyKwh = (totalConsumption / 1000).toFixed(2);
+                
+                // حساب الألواح الشمسية مع هامش الأمان
+                const panelsCount = Math.ceil(totalConsumption / (currentSunHours * currentPanelWattage * 0.8) * currentSafetyMargin);
+                
+                // حساب البطاريات (لأنظمة أوف جريد والهجين)
+                let batteryResult = '';
+                if (currentSystemType !== 'ongrid') {
+                    const batteryCapacityAh = (totalConsumption / (currentSystemVoltage * 0.8 * 0.5)).toFixed(2); // 0.8 كفاءة، 0.5 عمق تفريص
+                    const requiredBatteries = Math.ceil(batteryCapacityAh / currentBatteryType);
+                    const batteryCapacityKwh = (currentBatteryType * requiredBatteries * currentSystemVoltage / 1000).toFixed(2);
+                    
+                    batteryResult = `
+                        <p><strong>سعة البطاريات المطلوبة:</strong> ${batteryCapacityAh} أمبير/ساعة</p>
+                        <p><strong>عدد البطاريات (${currentBatteryType}أمبير):</strong> ${requiredBatteries} بطارية</p>
+                        <p><strong>سعة التخزين:</strong> ${batteryCapacityKwh} كيلوواط ساعة</p>
+                    `;
+                }
+                
+                // حساب الانفرتر بالكيلوواط مع هامش الأمان
+                const inverterSizeWatts = Math.ceil(maxLoad * currentSafetyMargin);
+                const inverterSizeKw = (inverterSizeWatts / 1000).toFixed(2);
+                
+                // تحديث عنوان التقرير
+                const title = reportTitle.value || 'تقرير نظام الطاقة الشمسية';
+                resultsTitle.textContent = title;
+                
+                // عرض النتائج
+                resultsContent.innerHTML = `
+                    <p><strong>نوع النظام:</strong> ${getSystemTypeName(currentSystemType)}</p>
+                    <p><strong>الاستهلاك اليومي:</strong> ${dailyKwh} كيلوواط ساعة</p>
+                    <p><strong>عدد الألواح الشمسية (${currentPanelWattage} واط):</strong> ${panelsCount} لوح <span class="safety-margin">هامش أمان ${Math.round((currentSafetyMargin-1)*100)}%</span></p>
+                    <p><strong>حجم الانفرتر الموصى به:</strong> ${inverterSizeKw} كيلوواط (${inverterSizeWatts} واط)</p>
+                    ${batteryResult}
+                    <p><strong>هامش الأمان المطبق:</strong> <span class="safety-margin">+${Math.round((currentSafetyMargin-1)*100)}%</span></p>
+                `;
+                
+                resultsDiv.style.display = 'block';
+            }
+            
+            function getSystemTypeName(type) {
+                const types = {
+                    'offgrid': 'نظام معزول (أوف جريد)',
+                    'ongrid': 'نظام متصل بالشبكة (أون جريد)',
+                    'hybrid': 'نظام هجين'
+                };
+                return types[type] || '';
+            }
+            
+            // إضافة event listeners للتحديث التلقائي
+            systemType.addEventListener('change', calculateSystem);
+            sunHours.addEventListener('change', calculateSystem);
+            panelWattage.addEventListener('change', calculateSystem);
+            batteryType.addEventListener('change', calculateSystem);
+            systemVoltage.addEventListener('change', calculateSystem);
+            safetyMargin.addEventListener('change', calculateSystem);
+            reportTitle.addEventListener('input', function() {
+                resultsTitle.textContent = this.value || 'نتائج الحساب';
+            });
+            
+            // مشاركة عبر واتساب
+            whatsappShare.addEventListener('click', function() {
+                if (!resultsContent.innerHTML) {
+                    alert('الرجاء حساب النتائج أولاً');
+                    return;
+                }
+                
+                const title = reportTitle.value || 'نتائج حساب نظام الطاقة الشمسية من تطبيق شمسين';
+                const message = `${title}\n\n${resultsContent.textContent}\n\nتم الحساب باستخدام تطبيق شمسين`;
+                const encodedMessage = encodeURIComponent(message);
+                window.open(`https://wa.me/?text=${encodedMessage}`, '_blank');
+            });
+            
+            // الدوال العامة للوصول من الأزرار
+            window.editDevice = function(index) {
+                const device = devices[index];
+                const newHours = prompt('عدد الساعات الجديدة:', device.hours);
+                const newCount = prompt('العدد الجديد:', device.count);
+                
+                if (newHours && !isNaN(newHours) && newCount && !isNaN(newCount)) {
+                    device.hours = parseFloat(newHours);
+                    device.count = parseInt(newCount);
+                    device.dailyConsumption = (device.wattage * device.hours * device.count / 1000).toFixed(2);
+                    updateDevicesList();
+                    calculateSystem();
+                }
+            };
+            
+            window.deleteDevice = function(index) {
+                if (confirm('هل تريد حذف هذا الجهاز؟')) {
+                    devices.splice(index, 1);
+                    updateDevicesList();
+                    calculateSystem();
+                }
+            };
+        });
+    </script>
+</body>
+  </html>
