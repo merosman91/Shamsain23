@@ -11,7 +11,8 @@
             --accent-color: #e74c3c;
             --light-color: #ecf0f1;
             --dark-color: #2c3e50;
-            --success-color: #2ecc71;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
         }
 
         * {
@@ -21,7 +22,7 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Tajawal', Arial, sans-serif;
             background-color: #f5f7fa;
             color: var(--dark-color);
             line-height: 1.6;
@@ -38,26 +39,29 @@
         }
 
         .header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            text-align: center;
             margin-bottom: 20px;
-            flex-direction: column;
+            position: relative;
         }
 
         .logo {
-            width: 100px;
-            height: 100px;
-            margin-bottom: 10px;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%23FDB813"/><path d="M50 15 L50 5 M50 95 L50 85 M15 50 L5 50 M95 50 L85 50 M25 25 L18 18 M82 82 L75 75 M25 75 L18 82 M82 25 L75 18" stroke="%23FF5722" stroke-width="3"/></svg>');
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 10px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="45" fill="%23F39C12"/><path d="M50 10 L50 5 M50 95 L50 90 M10 50 L5 50 M95 50 L90 50 M25 25 L15 15 M85 85 L75 75 M25 75 L15 85 M85 25 L75 15" stroke="%23E74C3C" stroke-width="2.5" stroke-linecap="round"/><circle cx="50" cy="50" r="35" fill="%23F1C40F"/></svg>');
             background-size: contain;
             background-repeat: no-repeat;
         }
 
-        h1, h2, h3 {
+        h1 {
             color: var(--primary-color);
-            margin-bottom: 15px;
-            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 5px;
+        }
+
+        .tagline {
+            color: #7f8c8d;
+            font-size: 1rem;
         }
 
         .section {
@@ -65,8 +69,21 @@
             padding: 15px;
             background: #fff;
             border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
             border: 1px solid #eee;
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--secondary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title i {
+            margin-left: 8px;
         }
 
         select, input, button {
@@ -76,6 +93,7 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 16px;
+            font-family: 'Tajawal', Arial, sans-serif;
         }
 
         button {
@@ -83,11 +101,13 @@
             color: white;
             border: none;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
+            font-weight: bold;
         }
 
         button:hover {
             background-color: #2980b9;
+            transform: translateY(-2px);
         }
 
         table {
@@ -106,14 +126,69 @@
         th {
             background-color: var(--primary-color);
             color: white;
+            position: sticky;
+            top: 0;
         }
 
         .result-card {
-            background: #e8f4fc;
+            background: #f8f9fa;
             padding: 15px;
             margin: 10px 0;
-            border-radius: 5px;
+            border-radius: 8px;
             border-left: 4px solid var(--secondary-color);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .result-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px dashed #ddd;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .result-value {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+        }
+
+        .badge-primary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .badge-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .badge-warning {
+            background-color: var(--warning-color);
+            color: white;
+        }
+
+        .efficiency-bar {
+            height: 20px;
+            background-color: #ecf0f1;
+            border-radius: 10px;
+            margin: 5px 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .efficiency-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2ecc71, #3498db);
+            border-radius: 10px;
+            transition: width 0.5s;
         }
 
         .share-buttons {
@@ -124,15 +199,26 @@
 
         .whatsapp-btn {
             background-color: #25D366;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
-        .safety-margin {
-            display: inline-block;
-            padding: 3px 8px;
-            background-color: var(--success-color);
-            color: white;
-            border-radius: 4px;
-            font-size: 0.9em;
+        .visualization {
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .system-visual {
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 150"><rect x="50" y="50" width="50" height="50" fill="%23F39C12" rx="5"/><rect x="200" y="50" width="50" height="50" fill="%233498db" rx="5"/><rect x="125" y="50" width="50" height="50" fill="%232ecc71" rx="5"/><path d="M75 75 L125 75 M175 75 L125 75" stroke="%232c3e50" stroke-width="2"/><text x="75" y="40" font-family="Arial" font-size="12" text-anchor="middle" fill="%232c3e50">ألواح</text><text x="150" y="40" font-family="Arial" font-size="12" text-anchor="middle" fill="%232c3e50">منظم</text><text x="225" y="40" font-family="Arial" font-size="12" text-anchor="middle" fill="%232c3e50">بطاريات</text></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            height: 120px;
         }
 
         @media (min-width: 768px) {
@@ -162,23 +248,29 @@
             th, td {
                 padding: 8px 5px;
             }
+            
+            .logo {
+                width: 80px;
+                height: 80px;
+            }
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <div class="header">
             <div class="logo"></div>
             <h1>شمسين</h1>
-            <p>حاسبة الطاقة الشمسية المتكاملة</p>
+            <p class="tagline">حاسبة الطاقة الشمسية المتكاملة</p>
         </div>
         
         <div class="section">
-            <input type="text" id="report-title" placeholder="عنوان التقرير (اختياري)" style="text-align: center; font-size: 1.1em;">
+            <input type="text" id="report-title" placeholder="عنوان التقرير (اختياري)" style="text-align: center; font-size: 1.1em; padding: 12px;">
         </div>
         
         <div class="section">
-            <h2>إعدادات النظام الأساسية</h2>
+            <h2 class="section-title"><i class="fas fa-cog"></i> إعدادات النظام الأساسية</h2>
             <div class="grid-container">
                 <div>
                     <label>نوع النظام:</label>
@@ -196,12 +288,14 @@
         </div>
         
         <div class="section">
-            <h2>إضافة الأجهزة</h2>
+            <h2 class="section-title"><i class="fas fa-plug"></i> إضافة الأجهزة</h2>
             <div class="device-controls">
                 <select id="device-category">
                     <option value="">اختر فئة الجهاز</option>
                     <option value="cooling">أجهزة التبريد</option>
+                    <option value="freezer">الديب فريزر</option>
                     <option value="water">مضخات المياه</option>
+                    <option value="heating">أجهزة التدفئة</option>
                     <option value="kitchen">أجهزة المطبخ</option>
                     <option value="electronics">أجهزة إلكترونية</option>
                     <option value="lighting">الإضاءة</option>
@@ -216,9 +310,9 @@
                     <input type="number" id="device-count" placeholder="العدد" value="1" min="1">
                 </div>
             </div>
-            <button id="add-device">إضافة جهاز</button>
+            <button id="add-device"><i class="fas fa-plus"></i> إضافة جهاز</button>
             
-            <div style="overflow-x: auto;">
+            <div style="overflow-x: auto; max-height: 300px;">
                 <table id="devices-table">
                     <thead>
                         <tr>
@@ -238,7 +332,7 @@
         </div>
         
         <div class="section">
-            <h2>مواصفات النظام</h2>
+            <h2 class="section-title"><i class="fas fa-solar-panel"></i> مواصفات النظام</h2>
             <div class="grid-container">
                 <div>
                     <label>حجم اللوح الشمسي (واط):</label>
@@ -262,6 +356,8 @@
                         <option value="100">100 أمبير/ساعة</option>
                         <option value="150">150 أمبير/ساعة</option>
                         <option value="200" selected>200 أمبير/ساعة</option>
+                        <option value="250">250 أمبير/ساعة</option>
+                        <option value="300">300 أمبير/ساعة</option>
                     </select>
                 </div>
                 <div>
@@ -281,14 +377,40 @@
                     </select>
                 </div>
             </div>
+            
+            <div class="grid-container" style="margin-top: 15px;">
+                <div>
+                    <label>كفاءة النظام:</label>
+                    <select id="system-efficiency">
+                        <option value="0.75">75% (منخفضة)</option>
+                        <option value="0.8" selected>80% (متوسطة)</option>
+                        <option value="0.85">85% (عالية)</option>
+                        <option value="0.9">90% (فائقة)</option>
+                    </select>
+                </div>
+                <div>
+                    <label>منظم الشحن:</label>
+                    <select id="charge-controller">
+                        <option value="pwm">PWM (قياسي)</option>
+                        <option value="mppt" selected>MPPT (متقدم)</option>
+                    </select>
+                </div>
+            </div>
         </div>
         
         <div class="section">
-            <button id="calculate-btn">حساب النظام الشمسي</button>
+            <button id="calculate-btn"><i class="fas fa-calculator"></i> حساب النظام الشمسي</button>
             
             <div id="results" class="result-card" style="display:none;">
                 <h3 id="results-title">نتائج الحساب</h3>
-                <div id="results-content"></div>
+                
+                <div class="visualization">
+                    <div class="system-visual"></div>
+                </div>
+                
+                <div id="results-content">
+                    <!-- سيتم ملؤه بالجافاسكريبت -->
+                </div>
                 
                 <div class="share-buttons">
                     <button id="whatsapp-share" class="whatsapp-btn">
@@ -304,36 +426,59 @@
             // تعريف الأجهزة
             const devicesData = {
                 cooling: [
-                    {name: "مكيف مياه 4000 وحدة", wattage: 1500},
-                    {name: "مكيف مياه 6000 وحدة", wattage: 2200},
+                    {name: "مكيف شباك 1.5 طن", wattage: 1500},
+                    {name: "مكيف شباك 2 طن", wattage: 2000},
+                    {name: "مكيف سبليت 1.5 طن", wattage: 1200},
+                    {name: "مكيف سبليت 2 طن", wattage: 1800},
                     {name: "ثلاجة 10 قدم", wattage: 200},
                     {name: "ثلاجة 12 قدم", wattage: 250},
-                    {name: "ثلاجة 16 قدم", wattage: 300}
+                    {name: "ثلاجة 14 قدم", wattage: 300}
+                ],
+                freezer: [
+                    {name: "ديب فريزر 10 قدم", wattage: 250},
+                    {name: "ديب فريزر 12 قدم", wattage: 300},
+                    {name: "ديب فريزر 14 قدم", wattage: 350},
+                    {name: "ديب فريزر 16 قدم", wattage: 400}
                 ],
                 water: [
                     {name: "موتور مياه ربع حصان", wattage: 200},
                     {name: "موتور مياه نصف حصان", wattage: 400},
                     {name: "موتور مياه 1 حصان", wattage: 750},
                     {name: "موتور مياه 1.5 حصان", wattage: 1100},
-                    {name: "موتور مياه 2 حصان", wattage: 1500}
+                    {name: "موتور مياه 2 حصان", wattage: 1500},
+                    {name: "مضخة غاطسة 1 حصان", wattage: 800},
+                    {name: "مضخة غاطسة 1.5 حصان", wattage: 1200}
+                ],
+                heating: [
+                    {name: "جك سخان", wattage: 1500},
+                    {name: "سخان مياه كهربائي", wattage: 2000},
+                    {name: "دفاية زيت", wattage: 1000},
+                    {name: "دفاية هواء", wattage: 1500},
+                    {name: "هيتر شمسي", wattage: 500}
                 ],
                 kitchen: [
                     {name: "فرن كهربائي", wattage: 1200},
                     {name: "خلاط", wattage: 500},
                     {name: "فرامة", wattage: 300},
-                    {name: "ميكروويف", wattage: 800}
+                    {name: "ميكروويف", wattage: 800},
+                    {name: "غسالة أطباق", wattage: 1000},
+                    {name: "ماكينة قهوة", wattage: 800}
                 ],
                 electronics: [
                     {name: "تلفزيون LED", wattage: 100},
                     {name: "رسيفر", wattage: 30},
                     {name: "حاسوب محمول", wattage: 60},
+                    {name: "حاسوب مكتبي", wattage: 300},
                     {name: "شاحن موبايل", wattage: 5},
-                    {name: "شاحن لابتوب", wattage: 60}
+                    {name: "شاحن لابتوب", wattage: 60},
+                    {name: "راوتر", wattage: 10}
                 ],
                 lighting: [
                     {name: "لمبة إنارة LED", wattage: 10},
                     {name: "لمبة إنارة موفرة", wattage: 20},
-                    {name: "لمبة إنارة هالوجين", wattage: 50}
+                    {name: "لمبة إنارة هالوجين", wattage: 50},
+                    {name: "لمبة فلورسنت", wattage: 40},
+                    {name: "إضاءة حديقة", wattage: 30}
                 ]
             };
 
@@ -358,6 +503,8 @@
             const batteryType = document.getElementById('battery-type');
             const systemVoltage = document.getElementById('system-voltage');
             const safetyMargin = document.getElementById('safety-margin');
+            const systemEfficiency = document.getElementById('system-efficiency');
+            const chargeController = document.getElementById('charge-controller');
             
             let devices = [];
             
@@ -440,6 +587,8 @@
                 const currentBatteryType = parseInt(batteryType.value);
                 const currentSystemVoltage = parseInt(systemVoltage.value);
                 const currentSafetyMargin = parseFloat(safetyMargin.value);
+                const currentEfficiency = parseFloat(systemEfficiency.value);
+                const currentController = chargeController.value;
                 
                 // حساب الاستهلاك الكلي
                 let totalConsumption = 0;
@@ -455,20 +604,30 @@
                 
                 const dailyKwh = (totalConsumption / 1000).toFixed(2);
                 
-                // حساب الألواح الشمسية مع هامش الأمان
-                const panelsCount = Math.ceil(totalConsumption / (currentSunHours * currentPanelWattage * 0.8) * currentSafetyMargin);
+                // حساب الألواح الشمسية مع هامش الأمان وكفاءة النظام
+                const panelEfficiency = currentController === 'mppt' ? 0.95 : 0.85;
+                const panelsCount = Math.ceil((totalConsumption / (currentSunHours * currentPanelWattage * currentEfficiency * panelEfficiency)) * currentSafetyMargin);
                 
                 // حساب البطاريات (لأنظمة أوف جريد والهجين)
                 let batteryResult = '';
                 if (currentSystemType !== 'ongrid') {
-                    const batteryCapacityAh = (totalConsumption / (currentSystemVoltage * 0.8 * 0.5)).toFixed(2); // 0.8 كفاءة، 0.5 عمق تفريص
+                    const batteryCapacityAh = (totalConsumption / (currentSystemVoltage * currentEfficiency * 0.5)).toFixed(2); // 0.5 عمق تفريغ
                     const requiredBatteries = Math.ceil(batteryCapacityAh / currentBatteryType);
                     const batteryCapacityKwh = (currentBatteryType * requiredBatteries * currentSystemVoltage / 1000).toFixed(2);
                     
                     batteryResult = `
-                        <p><strong>سعة البطاريات المطلوبة:</strong> ${batteryCapacityAh} أمبير/ساعة</p>
-                        <p><strong>عدد البطاريات (${currentBatteryType}أمبير):</strong> ${requiredBatteries} بطارية</p>
-                        <p><strong>سعة التخزين:</strong> ${batteryCapacityKwh} كيلوواط ساعة</p>
+                        <div class="result-item">
+                            <span>سعة البطاريات المطلوبة:</span>
+                            <span class="result-value">${batteryCapacityAh} أمبير/ساعة</span>
+                        </div>
+                        <div class="result-item">
+                            <span>عدد البطاريات (${currentBatteryType}أمبير):</span>
+                            <span class="result-value">${requiredBatteries} بطارية</span>
+                        </div>
+                        <div class="result-item">
+                            <span>سعة التخزين:</span>
+                            <span class="result-value">${batteryCapacityKwh} كيلوواط ساعة</span>
+                        </div>
                     `;
                 }
                 
@@ -476,18 +635,54 @@
                 const inverterSizeWatts = Math.ceil(maxLoad * currentSafetyMargin);
                 const inverterSizeKw = (inverterSizeWatts / 1000).toFixed(2);
                 
+                // حساب منظم الشحن
+                const controllerType = currentController === 'mppt' ? 'MPPT (متقدم)' : 'PWM (قياسي)';
+                const controllerEfficiency = currentController === 'mppt' ? '90-95%' : '75-85%';
+                
                 // تحديث عنوان التقرير
                 const title = reportTitle.value || 'تقرير نظام الطاقة الشمسية';
                 resultsTitle.textContent = title;
                 
                 // عرض النتائج
                 resultsContent.innerHTML = `
-                    <p><strong>نوع النظام:</strong> ${getSystemTypeName(currentSystemType)}</p>
-                    <p><strong>الاستهلاك اليومي:</strong> ${dailyKwh} كيلوواط ساعة</p>
-                    <p><strong>عدد الألواح الشمسية (${currentPanelWattage} واط):</strong> ${panelsCount} لوح <span class="safety-margin">هامش أمان ${Math.round((currentSafetyMargin-1)*100)}%</span></p>
-                    <p><strong>حجم الانفرتر الموصى به:</strong> ${inverterSizeKw} كيلوواط (${inverterSizeWatts} واط)</p>
+                    <div class="result-item">
+                        <span>نوع النظام:</span>
+                        <span class="result-value">${getSystemTypeName(currentSystemType)}</span>
+                    </div>
+                    <div class="result-item">
+                        <span>الاستهلاك اليومي:</span>
+                        <span class="result-value">${dailyKwh} كيلوواط ساعة</span>
+                    </div>
+                    <div class="result-item">
+                        <span>عدد الألواح الشمسية (${currentPanelWattage} واط):</span>
+                        <span class="result-value">${panelsCount} لوح <span class="badge badge-primary">هامش أمان ${Math.round((currentSafetyMargin-1)*100)}%</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>حجم الانفرتر الموصى به:</span>
+                        <span class="result-value">${inverterSizeKw} كيلوواط <span class="badge">${inverterSizeWatts} واط</span></span>
+                    </div>
                     ${batteryResult}
-                    <p><strong>هامش الأمان المطبق:</strong> <span class="safety-margin">+${Math.round((currentSafetyMargin-1)*100)}%</span></p>
+                    <div class="result-item">
+                        <span>منظم الشحن:</span>
+                        <span class="result-value">${controllerType} <span class="badge">كفاءة ${controllerEfficiency}</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>كفاءة النظام:</span>
+                        <span class="result-value">
+                            <div class="efficiency-bar">
+                                <div class="efficiency-fill" style="width: ${currentEfficiency*100}%"></div>
+                            </div>
+                            ${Math.round(currentEfficiency*100)}%
+                        </span>
+                    </div>
+                    <div class="result-item">
+                        <span>هامش الأمان المطبق:</span>
+                        <span class="result-value"><span class="badge badge-success">+${Math.round((currentSafetyMargin-1)*100)}%</span></span>
+                    </div>
+                    <div class="result-item">
+                        <span>فقد الطاقة المقدر:</span>
+                        <span class="result-value"><span class="badge badge-warning">${Math.round((1-currentEfficiency)*100)}%</span></span>
+                    </div>
                 `;
                 
                 resultsDiv.style.display = 'block';
@@ -509,6 +704,8 @@
             batteryType.addEventListener('change', calculateSystem);
             systemVoltage.addEventListener('change', calculateSystem);
             safetyMargin.addEventListener('change', calculateSystem);
+            systemEfficiency.addEventListener('change', calculateSystem);
+            chargeController.addEventListener('change', calculateSystem);
             reportTitle.addEventListener('input', function() {
                 resultsTitle.textContent = this.value || 'نتائج الحساب';
             });
@@ -550,5 +747,6 @@
             };
         });
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
 </body>
-  </html>
+                        </html>
