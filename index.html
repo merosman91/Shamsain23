@@ -395,6 +395,19 @@
                         <option value="mppt" selected>MPPT (متقدم)</option>
                     </select>
                 </div>
+                <div>
+                    <label>ساعات التشغيل الليلي/الغيوم:</label>
+                    <input type="number" id="backup-hours" value="8" min="1" max="72" step="1">
+                </div>
+                <div>
+                    <label>عمق تفريغ البطارية (DOD):</label>
+                    <select id="battery-dod">
+                        <option value="0.5">50% (مثالي)</option>
+                        <option value="0.6">60%</option>
+                        <option value="0.7">70%</option>
+                        <option value="0.8">80% (غير موصى به)</option>
+                    </select>
+                </div>
             </div>
         </div>
         
@@ -505,6 +518,8 @@
             const safetyMargin = document.getElementById('safety-margin');
             const systemEfficiency = document.getElementById('system-efficiency');
             const chargeController = document.getElementById('charge-controller');
+            const backupHours = document.getElementById('backup-hours');
+            const batteryDod = document.getElementById('battery-dod');
             
             let devices = [];
             
@@ -589,6 +604,8 @@
                 const currentSafetyMargin = parseFloat(safetyMargin.value);
                 const currentEfficiency = parseFloat(systemEfficiency.value);
                 const currentController = chargeController.value;
+                const currentBackupHours = parseInt(backupHours.value) || 8;
+                const currentDod = parseFloat(batteryDod.value);
                 
                 // حساب الاستهلاك الكلي
                 let totalConsumption = 0;
@@ -611,11 +628,24 @@
                 // حساب البطاريات (لأنظمة أوف جريد والهجين)
                 let batteryResult = '';
                 if (currentSystemType !== 'ongrid') {
-                    const batteryCapacityAh = (totalConsumption / (currentSystemVoltage * currentEfficiency * 0.5)).toFixed(2); // 0.5 عمق تفريغ
+                    // حساب الاستهلاك خلال ساعات الغياب الشمسي (الليل/الغيوم)
+                    const nightConsumption = (totalConsumption / 24) * currentBackupHours;
+                    
+                    // حساب سعة البطاريات المطلوبة مع مراعاة عمق التفريغ
+                    const batteryCapacityAh = (nightConsumption / (currentSystemVoltage * currentEfficiency * currentDod)).toFixed(2);
+                    
                     const requiredBatteries = Math.ceil(batteryCapacityAh / currentBatteryType);
                     const batteryCapacityKwh = (currentBatteryType * requiredBatteries * currentSystemVoltage / 1000).toFixed(2);
                     
                     batteryResult = `
+                        <div class="result-item">
+                            <span>ساعات التشغيل بدون شمس:</span>
+                            <span class="result-value">${currentBackupHours} ساعة</span>
+                        </div>
+                        <div class="result-item">
+                            <span>عمق تفريغ البطارية (DOD):</span>
+                            <span class="result-value">${currentDod*100}%</span>
+                        </div>
                         <div class="result-item">
                             <span>سعة البطاريات المطلوبة:</span>
                             <span class="result-value">${batteryCapacityAh} أمبير/ساعة</span>
@@ -627,6 +657,10 @@
                         <div class="result-item">
                             <span>سعة التخزين:</span>
                             <span class="result-value">${batteryCapacityKwh} كيلوواط ساعة</span>
+                        </div>
+                        <div class="result-item">
+                            <span>عمر البطارية المتوقع:</span>
+                            <span class="result-value">${calculateBatteryLife(currentDod)} سنوات</span>
                         </div>
                     `;
                 }
@@ -688,6 +722,14 @@
                 resultsDiv.style.display = 'block';
             }
             
+            // حساب العمر المتوقع للبطارية بناء على عمق التفريغ
+            function calculateBatteryLife(dod) {
+                if (dod <= 0.5) return '5-7';
+                if (dod <= 0.6) return '4-6';
+                if (dod <= 0.7) return '3-5';
+                return '2-3';
+            }
+            
             function getSystemTypeName(type) {
                 const types = {
                     'offgrid': 'نظام معزول (أوف جريد)',
@@ -706,6 +748,8 @@
             safetyMargin.addEventListener('change', calculateSystem);
             systemEfficiency.addEventListener('change', calculateSystem);
             chargeController.addEventListener('change', calculateSystem);
+            backupHours.addEventListener('change', calculateSystem);
+            batteryDod.addEventListener('change', calculateSystem);
             reportTitle.addEventListener('input', function() {
                 resultsTitle.textContent = this.value || 'نتائج الحساب';
             });
@@ -749,4 +793,4 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
 </body>
-                        </html>
+    </html>
